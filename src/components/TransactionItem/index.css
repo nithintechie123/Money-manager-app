@@ -12,11 +12,13 @@
   font-family: 'Roboto';
   font-size: 12px;
   font-weight: 500;
+  margin-left: 20px;
 }
 .delete-button {
   background-color: transparent;
   outline: none;
   border-width: 0px;
+  cursor: pointer;
 }
 
 .delete-image {

@@ -122,6 +122,7 @@
   border: 1px solid #cbd5e1;
   list-style-type: none;
   display: flex;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   padding-left: 0px;

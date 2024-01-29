@@ -2,11 +2,11 @@ import {Component} from 'react'
 
 import {v4} from 'uuid'
 
-import './index.css'
-
 import MoneyDetails from '../MoneyDetails'
 
 import TransactionItem from '../TransactionItem'
+
+import './index.css'
 
 const transactionTypeOptions = [
   {
@@ -53,7 +53,7 @@ class MoneyManager extends Component {
     const newTransactionItem = {
       id: v4(),
       title: titleInput,
-      amount: amountInput,
+      amount: parseInt(amountInput),
       type: displayText,
     }
 
@@ -65,6 +65,18 @@ class MoneyManager extends Component {
     }))
   }
 
+  onDeleteTransaction = id => {
+    const {transactionsList} = this.state
+
+    const updatedTransactionList = transactionsList.filter(
+      eachTransaction => eachTransaction.id !== id,
+    )
+
+    this.setState({
+      transactionsList: updatedTransactionList,
+    })
+  }
+
   getIncomeAmount = () => {
     const {transactionsList} = this.state
     let incomeAmount = 0
@@ -74,6 +86,7 @@ class MoneyManager extends Component {
         incomeAmount += eachTransaction.amount
       }
     })
+
     return incomeAmount
   }
 
@@ -83,9 +96,10 @@ class MoneyManager extends Component {
 
     transactionsList.forEach(eachTransaction => {
       if (eachTransaction.type === transactionTypeOptions[1].displayText) {
-        expensesAmount += expensesAmount.amount
+        expensesAmount += eachTransaction.amount
       }
     })
+
     return expensesAmount
   }
 
@@ -99,7 +113,7 @@ class MoneyManager extends Component {
       if (eachTransaction.type === transactionTypeOptions[0].displayText) {
         incomeAmount += eachTransaction.amount
       } else {
-        expensesAmount += expensesAmount.amount
+        expensesAmount += eachTransaction.amount
       }
     })
     balanceAmount = incomeAmount - expensesAmount
@@ -112,6 +126,10 @@ class MoneyManager extends Component {
     const balanceAmount = this.getBalanceAmount()
     const incomeAmount = this.getIncomeAmount()
     const expensesAmount = this.getExpensesAmount()
+
+    console.log(balanceAmount)
+    console.log(incomeAmount)
+    console.log(expensesAmount)
 
     return (
       <div className="app-container">
@@ -153,7 +171,7 @@ class MoneyManager extends Component {
               <input
                 id="amount"
                 type="text"
-                title={amountInput}
+                value={amountInput}
                 placeholder="AMOUNT"
                 className="input-element"
                 onChange={this.onChangeAmountInput}
@@ -177,22 +195,22 @@ class MoneyManager extends Component {
                 Add
               </button>
             </form>
-            <div className="history-container">
+            <ul className="history-container">
               <h1 className="add-transaction-heading">History</h1>
-              <div className="columns-heading-container">
+              <li className="columns-heading-container">
                 <p className="column-heading">Title</p>
                 <p className="column-heading">Amount</p>
                 <p className="column-heading">Type</p>
-              </div>
-              <ul className="transaction-items-container">
-                {transactionsList.map(eachTransaction => (
-                  <TransactionItem
-                    key={eachTransaction.id}
-                    transactionItemDetails={eachTransaction}
-                  />
-                ))}
-              </ul>
-            </div>
+                <p> </p>
+              </li>
+              {transactionsList.map(eachTransaction => (
+                <TransactionItem
+                  key={eachTransaction.id}
+                  transactionItemDetails={eachTransaction}
+                  onDeleteTransaction={this.onDeleteTransaction}
+                />
+              ))}
+            </ul>
           </div>
         </div>
       </div>
